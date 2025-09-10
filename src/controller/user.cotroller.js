@@ -5,7 +5,6 @@ import {User} from "../models/user.model.js"
 import { uploadOnCloudinary } from "../utils/cloudinary.js"
 import { json } from "express";
 import jwt from "jsonwebtoken"
-import { use } from "react";
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
