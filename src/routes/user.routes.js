@@ -36,8 +36,8 @@ router.route("/login").post(upload.none(), loginUser)
 router.route("/logout").post(upload.none(), verifyJWT, logoutUser)
 router.route("/refresh-accessToken").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, upload.none(), changeCurrentPassword)
-router.route("current-user").get(verifyJWT, getCurrentUser)
-router.route("update-account").patch(verifyJWT, upload.none(), updateAccountDetails) // used patch as we are only updating some enteries
+router.route("/current-user").get(verifyJWT, getCurrentUser)
+router.route("/update-account").patch(verifyJWT, upload.none(), updateAccountDetails) // used patch as we are only updating some enteries
 
 router.route("/avatar").post(verifyJWT, upload.single("avatar"), updateUserAvatar)
 router.route("/coverImage").post(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
