@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import {User} from "../models/user.model.js"
-import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js"
 import { json } from "express";
 import jwt from "jsonwebtoken"
 
@@ -276,6 +276,7 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
         throw new ApiError(400, "Avatar file is missing")
     }
 
+    const oldFileUrl = req.user.avatar;
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
 
@@ -292,12 +293,14 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
             }
         },
         {new: true}
-    ).select("-password")
+    ).select("-password -refreshToken")
+
+    const deletedOld = await deleteFromCloudinary(oldFileUrl, "image")
 
     return res
     .status(200)
     .json(
-        new ApiResponse(200, user, "Avatar image updated successfully")
+        new ApiResponse(200, {user, deletedOld}, "Avatar image updated successfully ")
     )
 })
 
