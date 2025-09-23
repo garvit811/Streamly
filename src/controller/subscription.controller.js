@@ -1,47 +1,68 @@
+import mongoose, { isValidObjectId } from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Subscription } from "../models/subscription.model.js";
+import { User } from "../models/user.model.js";
+
 
 const toggleSubscription = asyncHandler(async (req, res) => {
-    const {channelId} = req.params
-    const userId = req.user._id
-
-    const isSubscribed = await Subscription.findOne({channel: channelId, subscriber: userId})
-
-    if(!isSubscribed){
-        const subscription = await Subscription.create({
-            subscriber: userId,
-            channel: channelId
-        })
-
-        const doneSubscription = await Subscription.findById(subscription._id)
-
-        if(!doneSubscription){
-            throw new ApiError(500, "Something went wrong while Subscribing the Channel")
-        }
-
-        return res.status(201).json(
-            new ApiResponse(201, {subscribed : true}, "Channel subscribed successfully")
-        )
+    const {c_id} = req.params
+    // TODO: toggle subscription
+    
+    if(!c_id?.trim()){
+        throw new ApiError(400,"ChannelId is required")
     }
-    else {
-        const unsubscribing = await Subscription.deleteOne({channel: channelId, subscriber: userId})
-
-        if(unsubscribing.deletedCount === 0){
-            throw new ApiError(500, "Something went wrong while unsubscribing the channel")
-        }
-
-        return res.status(200).json(
-            new ApiResponse(200, {subscribed : false}, "Channel unsubscribed successfully")
-        )
+    
+    if (!isValidObjectId(c_id)) {
+        throw new ApiError(400, "Invalid channelId format");
     }
+
+    const userId = req.user?._id
+    if (!userId) {
+        throw new ApiError(400, "userId is required")
+    }
+
+    if(c_id.toString() === userId.toString()){
+        throw new ApiError(400,"You cannot subscribe to your own channel")
+    }
+
+    const existingSubscription = await Subscription.findOne({
+        subscriber:userId,
+        channel:c_id,
+    })
+
+    if(existingSubscription){
+       await Subscription.findByIdAndDelete(existingSubscription._id)
+       return res.status(200).json(new ApiResponse(
+        200,
+        {},
+        "Unsubscribed successfully"
+       ))
+    }
+
+    await Subscription.create({
+         subscriber:userId,
+         channel:c_id,
+    })
+
+    return res.status(201).json(new ApiResponse(
+        201,
+        {},
+        "Subscribed successfully"
+    ))
+
+
+
+
+
 })
+
 
 
 // controller to return subscriber list of a channel
 const getUserChannelSubscribers = asyncHandler(async (req, res) => {
-    const {channelId} = req.params
+    const { channelId } = req.params
 })
 
 
