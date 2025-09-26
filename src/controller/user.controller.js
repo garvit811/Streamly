@@ -393,7 +393,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                 },
                 videos: {
                     $map: {
-                        $input: "$videos",
+                        input: "$videos",
                         as: "video",
                         in: {
                             id: "$$video._id",
@@ -415,6 +415,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                 isSubscribed: 1,
                 avatar: 1,
                 coverImage: 1,
+                videos: 1,
                 email: 1
 
             }
