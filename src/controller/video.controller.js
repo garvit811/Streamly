@@ -4,6 +4,8 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js"
 import { Video } from "../models/video.model.js";
+import { Like } from "../models/like.model.js";
+import { Comment } from "../models/comment.model.js";
 
 const publishVideo = asyncHandler(async (req, res) => {
     const { title, description } = req.body
@@ -250,6 +252,11 @@ const deleteVideo = asyncHandler(async (req, res) => {
     const oldUrlThumbnail = video.thumbnail
 
     await Video.findByIdAndDelete(videoId)
+
+    await Promise.all([
+        Like.deleteMany({ video: videoId }),
+        Comment.deleteMany({ video: videoId })
+    ]);
 
     const deletedOld1 = await deleteFromCloudinary(oldUrlVideo, "video")
     const deletedOld2 = await deleteFromCloudinary(oldUrlThumbnail, "image")
