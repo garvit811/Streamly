@@ -90,10 +90,17 @@ const getVideoById = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: "users",
+                localField: "comments.owner",
+                foreignField: "_id",
+                as: "commentOwners"
+            }
+        },
+        // 🔑 Merge comment + owner details
+        {
             $addFields: {
-                likesCount: {
-                    $size: "$likes"
-                },
+                likesCount: { $size: "$likes" },
                 comments: {
                     $map: {
                         input: "$comments",
@@ -101,7 +108,30 @@ const getVideoById = asyncHandler(async (req, res) => {
                         in: {
                             id: "$$comment._id",
                             content: "$$comment.content",
-                            owner: "$$comment.owner",
+                            owner: {
+                                $let: {
+                                    vars: {
+                                        ownerObj: {
+                                            $arrayElemAt: [
+                                                {
+                                                    $filter: {
+                                                        input: "$commentOwners",
+                                                        as: "co",
+                                                        cond: { $eq: ["$$co._id", "$$comment.owner"] }
+                                                    }
+                                                },
+                                                0
+                                            ]
+                                        }
+                                    },
+                                    in: {
+                                        _id: "$$ownerObj._id",
+                                        fullName: "$$ownerObj.fullName",
+                                        username: "$$ownerObj.username",
+                                        avatar: "$$ownerObj.avatar"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
