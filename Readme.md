@@ -1,6 +1,10 @@
 
 # STREAMLY - A Backend for a Video Streaming Platform (YouTube Clone) 🎬
 
+**Live API Base URL:** [https://streamly-backend.onrender.com/](https://streamly-backend.onrender.com/)
+
+[![API Status](https://img.shields.io/website?up_message=online&down_message=offline&label=status&url=https://streamly-backend.onrender.com)](https://streamly-backend.onrender.com)
+
 A robust and scalable backend service built with Node.js that powers a modern video streaming application. This project handles everything from user authentication and video processing to likes, comments and subscriptions.
 
 ## 🚀 About The Project
