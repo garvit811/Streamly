@@ -159,7 +159,7 @@ STREAMLY/
   {{server}}/api/v1/videos
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Post`      | `/publishvideo` | Post a video |
 | `Get`      | `/video/:videoId` | Get video by Id |
@@ -174,7 +174,7 @@ STREAMLY/
   {{server}}/api/v1/subscribe
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Post`      | `/subscribe_toggle/:c_id` | Subscribe or unsubscribe a channel |
 | `Get`      | `/subscribers/:c_id` | Get subscriber for channel |
@@ -188,7 +188,7 @@ STREAMLY/
   {{server}}/api/v1/like
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Post`      | `/likes/video/:videoId` | Toggle a like on video |
 | `Post`      | `/likes/comment/:commentId` | Toggle a like on comment |
@@ -201,7 +201,7 @@ STREAMLY/
   {{server}}/api/v1/comments
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Post`      | `/comment/:commentId` | Delete a comment |
 | `Post`      | `/addComment/:videoId` | Add a comment to video |
@@ -214,7 +214,7 @@ STREAMLY/
   {{server}}/api/v1/playlists
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Post`      | `/playlist/create` | Create a Playlist |
 | `Get`      | `/user-playlist/:userId` | Get all playlists created by user |
@@ -231,7 +231,7 @@ STREAMLY/
   {{server}}/api/v1
 ```
 
-| Parameter | Type     | Description                       |
+| Method | Endpoint     | Description                       |
 | :-------- | :------- | :-------------------------------- |
 | `Get`      | `/search` | Search by query |
 
